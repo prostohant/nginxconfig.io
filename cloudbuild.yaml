@@ -1,0 +1,25 @@
+steps:
+- name: 'gcr.io/kaniko-project/executor:latest'
+  args:
+    - '--context=dir:///workspace'
+    - '--dockerfile=/workspace/Dockerfile'
+    - '--destination=us-central1-docker.pkg.dev/$PROJECT_ID/my-app-repo/nginx-configurator:$SHORT_SHA'
+    - '--cache=true'
+    - '--cache-ttl=24h'
+
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+    - 'run'
+    - 'deploy'
+    - 'nginx-config-tool'
+    - '--image'
+    - 'us-central1-docker.pkg.dev/$PROJECT_ID/my-app-repo/nginx-configurator:$SHORT_SHA'
+    - '--region'
+    - 'us-central1'
+    - '--platform'
+    - 'managed'
+    - '--allow-unauthenticated' # Make it public for testing
+
+options:
+  logging: CLOUD_LOGGING_ONLY

@@ -20,7 +20,7 @@ steps:
     - '--platform'
     - 'managed'
     - '--allow-unauthenticated' # Make it public for testing
-    - '--liveness-probe httpGet.port=80'
+    - '--liveness-probe=httpGet.port=80'
 
 options:
   logging: CLOUD_LOGGING_ONLY
